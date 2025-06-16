@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"net"
-
+	"google.golang.org/grpc/reflection"
 	"github.com/glitchdawg/reportservice/internal/server"
 	pb "github.com/glitchdawg/reportservice/proto"
 	"github.com/robfig/cron/v3"
@@ -20,6 +20,7 @@ func main() {
 	s := grpc.NewServer()
 	reportServer := &server.ReportServiceServer{Store: store}
 	pb.RegisterReportServiceServer(s, reportServer)
+	reflection.Register(s)
 
 	go startCronJob(reportServer)
 
